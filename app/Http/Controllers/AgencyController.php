@@ -13,8 +13,9 @@ class AgencyController extends Controller
      */
     public function index()
     {
-        $agencies = Agency::orderBy('name')->get();
-
+        //since the model already has the relationship we can use withCount to get
+        //the count of each relationship. 
+        $agencies = Agency::withCount(['caregivers'])->orderBy('name')->paginate(20);
         return view('agencies.index', compact('agencies'));
     }
 
