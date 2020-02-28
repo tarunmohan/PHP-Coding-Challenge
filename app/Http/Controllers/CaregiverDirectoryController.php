@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Caregiver;
+
 class CaregiverDirectoryController extends Controller
 {
     /**
@@ -9,8 +11,9 @@ class CaregiverDirectoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke()
-    {
-        return view('caregivers-directory');
-    }
+      public function __invoke()
+      {
+          $careGivers = Caregiver::with('agency')->orderBy('name', 'asc')->get();
+          return view('caregivers-directory', compact('careGivers'));
+      }
 }
