@@ -5,7 +5,6 @@
     height="300"
 ></canvas>
 
-
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 <script>
@@ -14,7 +13,7 @@
         data: {
             datasets: [{
                 data: [
-                    1, 2, 3, 4
+                    {{ implode(',', array_keys($caregiver_totals)) }}
                 ],
                 backgroundColor: [
                     "rgba(255, 99, 132, 0.8)",
@@ -24,7 +23,7 @@
                 ],
             }],
             labels: [
-                'Position One', 'Position Two', 'Position Three', 'Position Four'
+                 '{!! implode("' , '" ,array_values($caregiver_totals)) !!}'
             ],
         },
         options: {

@@ -32,7 +32,12 @@
                 <div class="col-sm-12 mt-5">
                     <h3>Type of Caregiver <small class="text-muted">among all agencies</small></h3>
                     <div class="mt-4">
-                        @include('partials.caregiver-positions-chart')
+                        @empty($caregiver_totals)
+                            Sorry no Caregivers found
+                        @endempty
+                        @isset($caregiver_totals)
+                            @include('partials.caregiver-positions-chart')
+                        @endisset
                     </div>
                 </div>
             </div>
@@ -49,23 +54,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Rosalind Johnston</td>
-                                <td>870521</td>
-                                <td>@include('partials.license-expiration')</td>
-                            </tr>
-                            <tr>
-                                <td>Celestino Brekke</td>
-                                <td>32750</td>
-                                <td>@include('partials.license-expiration')</td>
-                            </tr>
-                            <tr>
-                                <td>Diana Koss</td>
-                                <td>717302</td>
-                                <td>@include('partials.license-expiration')</td>
-                            </tr>
+                            @forelse ($caregivers_exp_soonest as $caregiver)
+                                <tr>
+                                    <td>{{ $caregiver->name }}</td>
+                                    <td>{{ $caregiver->license_number }}</td>
+                                    <td>@include('partials.license-expiration')</td>
+                                </tr>
+                            @empty
+                                <tr><td rowspan="3">No licences expiring<td></tr>
+                            @endforelse
                         </tbody>
                     </table>
+
                 </div>
             </div>
 
