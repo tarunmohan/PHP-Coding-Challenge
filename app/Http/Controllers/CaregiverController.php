@@ -36,7 +36,7 @@ class CaregiverController extends Controller
           'name'                =>  'required|regex:/^[A-Za-z\s\.-_]+$/',
           'email'               =>  'required|email|unique:caregivers',
           'position'            =>  ['required', Rule::in(config('caregivers.positions'))],
-          'license_number'      =>  'required_if:position,==,Skilled Nurse',
+          'license_number'      =>  'required_if:position,==,Skilled Nurse|regex:',
           'license_expiration'  =>  'required_if:position,==,Skilled Nurse'
         ]);
 
@@ -58,7 +58,11 @@ class CaregiverController extends Controller
      */
     public function destroy(Agency $agency, Caregiver $caregiver)
     {
-        //
+        /*
+            It is tipucally a good idea for us to perform soft deletes especially in healthcare applications
+            however for the purpose of this task i have chosen to do just a destroy
+        */
+        Caregiver::findorfail($caregiver->id)->destroy($caregiver->id);
 
         return redirect()
             ->route('agencies.show', $agency)
