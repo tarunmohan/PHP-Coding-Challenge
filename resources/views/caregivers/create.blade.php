@@ -14,19 +14,19 @@
 
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" name="name" value="" class="form-control">
+                    <input type="text" name="name" value="{{ old('name') }}" class="form-control">
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" name="email" value="" class="form-control">
+                    <input type="email" name="email" value="{{ old('email') }}" class="form-control">
                 </div>
 
                 <div class="form-group">
                     <label for="position">Position:</label>
                     <select name="position" class="form-control">
                         @foreach ($positions as $position)
-                        <option value="{{ $position }}">{{ $position }}</option>
+                            <option {{ old('position') == $position ? 'selected' : '' }} value="{{ $position }}">{{ $position }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -37,12 +37,12 @@
                     <div class="card border-secondary p-4">
                         <div class="form-group">
                             <label for="license_number">License Number:</label>
-                            <input type="text" name="license_number" value="" class="form-control">
+                            <input type="text" name="license_number" value="{{ old('license_number') }}" class="form-control">
                         </div>
 
                         <div class="form-group">
                             <label for="license_expiration">License Expiry:</label>
-                            <input type="date" name="license_expiration" value="" class="form-control">
+                            <input type="date" name="license_expiration" value="{{ old('license_expiration') }}" class="form-control">
                         </div>
                     </div>
                 </section>
@@ -61,6 +61,23 @@
 
 @push('scripts')
 <script>
-    //
+    /* Add two event listners one on load and the second for dropdown value change */
+    window.addEventListener('load', function(){
+        document.getElementsByName('position')[0].addEventListener('change', toggleLicenseDetails);
+        toggleLicenseDetails();
+    });
+
+    /* Toggle between the positionDetails section display if its skilled nurse */
+    function toggleLicenseDetails(){
+        var position = document.getElementsByName('position')[0];
+        var positionDetails = document.getElementById('license');
+        if(position.value == "Skilled Nurse"){
+            if(positionDetails.style.display == "none"){
+                positionDetails.style.display = "block";
+            }
+        }else{
+            positionDetails.style.display = "none";
+        }
+    }
 </script>
 @endpush

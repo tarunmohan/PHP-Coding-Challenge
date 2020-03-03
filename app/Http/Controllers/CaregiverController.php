@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Agency;
 use App\Caregiver;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CaregiverController extends Controller
 {
@@ -30,7 +31,18 @@ class CaregiverController extends Controller
      */
     public function store(Request $request, Agency $agency)
     {
-        //
+        //dd($request);
+        $request->validate([
+          'name'                =>  'required|regex:/^[A-Za-z\s\.-_]+$/',
+          'email'               =>  'required|email|unique:caregivers',
+          'position'            =>  ['required', Rule::in(config('caregivers.positions'))],
+          'license_number'      =>  'required_if:position,==,Skilled Nurse',
+          'license_expiration'  =>  'required_if:position,==,Skilled Nurse'
+        ]);
+
+        $input = $request->all();
+        $input['agency_id'] = $agency->id;
+        $caregiver = Caregiver::create($input);
 
         return redirect()
             ->route('agencies.show', $agency)
